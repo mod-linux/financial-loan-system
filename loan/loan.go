@@ -1,9 +1,7 @@
 package loan
 
 import (
-	"fmt"
 	Charges "linus/lms/charges"
-	"linus/lms/constants"
 	"linus/lms/finance"
 )
 
@@ -22,7 +20,7 @@ type ChargesConfiguration struct {
 	Charges []Charges.Charges
 }
 
-func (loanDetail LoanDetails) deductFromAmount() float64 {
+func (loanDetail LoanDetails) getNetLoanAmount() float64 {
 	// Initialize amount with the loan amount
 	amount := loanDetail.LoanAmount
 
@@ -39,19 +37,18 @@ func (loanDetail LoanDetails) deductFromAmount() float64 {
 }
 
 func (loanDetail LoanDetails) Init() LoanDetails {
-	monthlyInterestRate := finance.ConvertInterestRateBasedOnFrequency(loanDetail.InterestRate, loanDetail.PaymentFrequency)
-
-	if loanDetail.InterestType == constants.Flat {
-		// Only calculate the reducing interest rate if the interest type is reducing
-		monthlyInterestRate = finance.ToReducing(loanDetail.InterestRate, loanDetail.Tenure, loanDetail.PaymentFrequency, loanDetail.deductFromAmount())
-	}
-
-	loanDetail.monthlyInterestRate = monthlyInterestRate
-	fmt.Println(loanDetail.monthlyInterestRate)
-
+	loanDetail.monthlyInterestRate = finance.ReducingInterestRate(loanDetail.InterestRate, loanDetail.getNetLoanAmount(), loanDetail.Tenure, loanDetail.InterestType, loanDetail.PaymentFrequency)
 	return loanDetail
 }
 
 func (loanDetail LoanDetails) GetEMI() float64 {
 	return finance.CalculatePMT(loanDetail.LoanAmount, loanDetail.monthlyInterestRate, loanDetail.Tenure)
+}
+
+func (loanDetail LoanDetails) GetTotalInterest() float64 {
+	return finance.GetTotalInterestCharged(loanDetail.InterestRate, loanDetail.getNetLoanAmount())
+}
+
+func (loanDetail LoanDetails) GetReducingInterestRate() float64 {
+	return loanDetail.monthlyInterestRate
 }

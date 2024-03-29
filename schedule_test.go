@@ -11,10 +11,10 @@ func TestGetRepayment(t *testing.T) {
 
 	// Initialize LoanDetails with specific values
 	LoanDetails := loan.LoanDetails{
-		Tenure:           12.00,                    // Duration of the loan in years
+		Tenure:           12.00,                    // Duration of the loan in month
 		LoanAmount:       50000,                    // Initial loan amount
-		InterestType:     constants.Reducing,       // Type of interest calculation
-		InterestRate:     13.00,                    // Annual interest rate
+		InterestType:     constants.Flat,           // Type of interest calculation
+		InterestRate:     13,                       // Annual interest rate
 		PaymentFrequency: constants.PaymentMonthly, // Frequency of payments
 		ChargesConfiguration: loan.ChargesConfiguration{ // Charges configuration
 			Charges: []Charges.Charges{ // Slice of charge configurations
