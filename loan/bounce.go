@@ -1,4 +1,4 @@
-package charges
+package loan
 
 type BounceCharges struct {
 	Amount             float32

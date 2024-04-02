@@ -1,4 +1,4 @@
-package charges
+package loan
 
 type PenalCharges struct {
 	Amount             float32
