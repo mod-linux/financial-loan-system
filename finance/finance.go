@@ -1,6 +1,7 @@
 package finance
 
 import (
+	"fmt"
 	"linus/lms/constants"
 	"math"
 )
@@ -84,4 +85,50 @@ func CalculatePMT(amount, r, tenure float64) float64 {
 
 func GetTotalInterestCharged(r, netAmount float64) float64 {
 	return r * netAmount / 100
+}
+
+func CalculateGST(amount, cgst, sgst, igst float64) float64 {
+	// Initialize GST amount
+	gstAmount := 0.0
+
+	// Calculate GST for each component
+	gstAmount += amount * (cgst + sgst + igst) / 100
+
+	return gstAmount
+}
+
+type Schedule struct {
+	EMI             float64
+	InterestAmount  float64
+	PrincipalAmount float64
+	Balance         float64
+}
+
+func GetLoanSchedule(tenure, emi, amount, monthlyInterest float64) []Schedule {
+
+	var schedules []Schedule
+
+	balance := amount
+	for i := 0; i < int(tenure)-1; i++ {
+		var schedule Schedule
+
+		schedule.EMI = math.Round(emi)
+		schedule.InterestAmount = balance * monthlyInterest
+		schedule.PrincipalAmount = schedule.EMI - schedule.InterestAmount
+		balance -= schedule.PrincipalAmount
+		schedule.Balance = balance
+
+		schedules = append(schedules, schedule)
+	}
+
+	lastSchedule := Schedule{}
+	lastSchedule.InterestAmount = balance * monthlyInterest
+	lastSchedule.PrincipalAmount = balance
+	lastSchedule.Balance = 0
+	lastSchedule.EMI = lastSchedule.InterestAmount + lastSchedule.PrincipalAmount
+
+	schedules = append(schedules, lastSchedule)
+
+	fmt.Println(schedules)
+	return schedules
 }

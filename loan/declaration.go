@@ -2,10 +2,12 @@ package loan
 
 type Charges interface {
 	Init(LoanDetails) interface{}
-	GetAmountToBeDeductedFromLoanAmount(LoanDetails) float64
+	DeductedFromDisbursement() float64
+	DeductedFromHoldAmount() float64
 }
+
 type GSTCharges struct {
-	IGST int
-	CGST int
-	SGST int
+	IGST float64
+	CGST float64
+	SGST float64
 }

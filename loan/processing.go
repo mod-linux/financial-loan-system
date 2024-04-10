@@ -7,6 +7,8 @@ type ProcessingFeeCharges struct {
 	ChargeInPercentage         float32
 	Frequency                  int
 	LSPCollected               bool
+	DeductFromDisbursement     bool
+	DeductFromHoldAmount       bool
 	PaidWithFirstEMI           bool
 	GSTApplicable              bool
 	TAXES                      GSTCharges
@@ -20,8 +22,15 @@ func (processingFeeCharges ProcessingFeeCharges) GetProcessingFeeAmount() float6
 	return processingFeeCharges.Amount
 }
 
-func (processingFeeCharges ProcessingFeeCharges) GetAmountToBeDeductedFromLoanAmount(loan LoanDetails) float64 {
-	if !processingFeeCharges.LSPCollected {
+func (processingFeeCharges ProcessingFeeCharges) DeductedFromDisbursement() float64 {
+	if processingFeeCharges.DeductFromDisbursement {
+		return processingFeeCharges.Amount
+	}
+	return 0
+}
+
+func (processingFeeCharges ProcessingFeeCharges) DeductedFromHoldAmount() float64 {
+	if processingFeeCharges.DeductFromHoldAmount {
 		return processingFeeCharges.Amount
 	}
 	return 0
