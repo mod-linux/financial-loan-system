@@ -19,7 +19,7 @@ func (downPayment DownPayment) GetDownPayment() float64 {
 }
 
 func (downPayment DownPayment) DeductedFromDisbursement() float64 {
-	if downPayment.DeductFromLoanAmount {
+	if downPayment.DeductFromLoanAmount && !downPayment.LSPCollected {
 		return downPayment.Amount
 	}
 	return 0

@@ -23,7 +23,7 @@ func (processingFeeCharges ProcessingFeeCharges) GetProcessingFeeAmount() float6
 }
 
 func (processingFeeCharges ProcessingFeeCharges) DeductedFromDisbursement() float64 {
-	if processingFeeCharges.DeductFromDisbursement {
+	if processingFeeCharges.DeductFromDisbursement && !processingFeeCharges.LSPCollected {
 		return processingFeeCharges.Amount
 	}
 	return 0

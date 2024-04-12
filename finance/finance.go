@@ -1,6 +1,7 @@
 package finance
 
 import (
+	"encoding/json"
 	"fmt"
 	"linus/lms/constants"
 	"math"
@@ -129,6 +130,11 @@ func GetLoanSchedule(tenure, emi, amount, monthlyInterest float64) []Schedule {
 
 	schedules = append(schedules, lastSchedule)
 
-	fmt.Println(schedules)
+	b, err := json.Marshal(schedules)
+	if err != nil {
+		fmt.Println(err)
+		return schedules
+	}
+	fmt.Println(string(b))
 	return schedules
 }
